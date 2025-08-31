@@ -7,101 +7,71 @@ from rubik_solver import utils  # pip install rubik-solver
 
 app = Flask(__name__)
 
-# ------------------ Helper: decode base64 → OpenCV image ------------------
+# ✅ Allowed cube colors
+ALLOWED_COLORS = set("WRBGYO")  # White, Red, Blue, Green, Yellow, Orange
 
 
-def decode_image(base64_string):
+def validate_cube_state(cube_state: str):
+    """Validate cube state string (54 characters, correct colors)."""
+    if len(cube_state) != 54:
+        return False, "Cube state must be 54 characters"
+    if not set(cube_state).issubset(ALLOWED_COLORS):
+        return False, f"Invalid color, got {set(cube_state) - ALLOWED_COLORS} and should be one of W,R,B,G,Y,O."
+    return True, ""
+
+
+@app.route("/solve", methods=["POST"])
+def solve_cube():
     try:
-        img_data = base64.b64decode(base64_string)
-        np_arr = np.frombuffer(img_data, np.uint8)
-        image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-        return image
+        data = request.json
+        cube_state = data.get("cube_state", "")
+
+        # ✅ Validate cube state
+        valid, error_msg = validate_cube_state(cube_state)
+        if not valid:
+            return jsonify({"error": error_msg}), 400
+
+        # ✅ Solve cube
+        try:
+            solution = utils.solve(cube_state, "Kociemba")
+            return jsonify({"solution": solution})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 400
+
     except Exception as e:
-        print("Decode error:", e)
-        return None
-
-# ------------------ Fake Color Detection (Replace with YOLO later) ------------------
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 
-def detect_face_colors(image):
-    """
-    Detects 9 stickers (3x3) colors on one face.
-    Replace this dummy function with your YOLO/OpenCV detection code.
-    """
-    # For now return dummy face (all white W)
-    return "WWWWWWWWW"
-
-# ------------------ ROUTE 1: Detect single face ------------------
-
-
-@app.route('/detect', methods=['POST'])
-def detect():
+@app.route("/detect", methods=["POST"])
+def detect_cube():
     try:
-        data = request.get_json()
-        if "image_data" not in data:
-            return jsonify({"error": "Missing image_data"}), 400
+        data = request.json
+        img_data = data.get("image_data", "")
 
-        # Decode image
-        image = decode_image(data["image_data"])
-        if image is None:
+        if not img_data:
+            return jsonify({"error": "No image provided"}), 400
+
+        # ✅ Decode base64
+        try:
+            img_bytes = base64.b64decode(img_data)
+            np_arr = np.frombuffer(img_bytes, np.uint8)
+            img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        except Exception:
             return jsonify({"error": "Invalid image"}), 400
 
-        # Detect colors
-        face_string = detect_face_colors(image)
+        # ❗ Dummy detection (replace with actual YOLO or CV pipeline later)
+        cube_state = "WWWWWWWWWRRRRRRRRRGGGGGGGGGOOOOOOOOOBBBBBBBBBYYYYYYYYY"
 
-        return jsonify({"face_string": face_string})
+        # ✅ Validate dummy output
+        valid, error_msg = validate_cube_state(cube_state)
+        if not valid:
+            return jsonify({"error": error_msg}), 400
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# ------------------ ROUTE 2: Solve cube ------------------
-
-
-@app.route("/")
-def home():
-    return "🟩 Welcome to Cube Buddy API! Use the /solve endpoint to solve a Rubik's Cube."
-
-
-@app.route('/solve', methods=['POST'])
-def solve():
-    try:
-        data = request.get_json()
-        if "cube_state" not in data:
-            return jsonify({"error": "Missing cube_state"}), 400
-
-        cube_state = data["cube_state"].strip().upper()
-
-        if len(cube_state) != 54:
-            return jsonify({"error": "Cube state must be 54 characters"}), 400
-
-        # Map colors → standard notation
-        color_map = {
-            'W': 'U',  # White = Up
-            'Y': 'D',  # Yellow = Down
-            'R': 'R',  # Red = Right
-            'O': 'L',  # Orange = Left
-            'G': 'F',  # Green = Front
-            'B': 'B'   # Blue = Back
-        }
-
-        if re.match(r'^[WRGYOB]{54}$', cube_state):
-            # Convert colors to URFDLB
-            cube_state = ''.join(color_map[c] for c in cube_state)
-        elif re.match(r'^[URFDLB]{54}$', cube_state):
-            # Already in solver format
-            pass
-        else:
-            return jsonify({"error": "Cube state must use either WRGYOB or URFDLB"}), 400
-
-        # Solve cube
-        solution = utils.solve(cube_state, 'Kociemba')
-
-        return jsonify({"solution": " ".join(solution)})
+        return jsonify({"cube_state": cube_state})
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 
-# ------------------ Run ------------------
 if __name__ == "__main__":
     app.run(debug=True)
