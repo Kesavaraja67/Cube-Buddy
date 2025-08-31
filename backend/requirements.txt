@@ -1,0 +1,4 @@
+Flask
+kociemba
+opencv-python
+numpy
