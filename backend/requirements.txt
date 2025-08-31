@@ -1,4 +1,5 @@
 Flask
+Flask-Cors
 kociemba
 opencv-python
 numpy
