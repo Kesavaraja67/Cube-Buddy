@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d5c15a3e60d147c85227ff72f38c63d814adc0080b42b5d972de162b4cc8af18
-size 790
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="currentColor" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Front face -->
+    <polygon points="256,80 112,160 112,320 256,400 400,320 400,160"></polygon>
+    
+    <!-- Vertical divides -->
+    <line x1="256" y1="80" x2="256" y2="400"></line>
+
+    <!-- Horizontal divides -->
+    <line x1="112" y1="240" x2="400" y2="240"></line>
+
+    <!-- Left diagonal -->
+    <line x1="112" y1="160" x2="256" y2="240"></line>
+
+    <!-- Right diagonal -->
+    <line x1="400" y1="160" x2="256" y2="240"></line>
+
+    <!-- Bottom diagonals -->
+    <line x1="112" y1="320" x2="256" y2="240"></line>
+    <line x1="400" y1="320" x2="256" y2="240"></line>
+  </g>
+</svg>
