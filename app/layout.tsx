@@ -1,11 +1,12 @@
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import BackgroundPaths from '@/components/background-paths'
-import './globals.css'
+// app/layout.tsx
+import type { Metadata } from 'next';
+import { Inter, Roboto_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/react';
+import BackgroundPaths from '@/components/background-paths';
+import './globals.css';
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const robotoMono = Roboto_Mono({ subsets: ['latin'], variable: '--font-roboto-mono' });
 
 export const metadata: Metadata = {
   title: 'Cube Buddy - Puzzle Solver',
@@ -28,20 +29,20 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-sans antialiased`}>
+    <html lang="en" className={`${inter.variable} ${robotoMono.variable}`}>
+      <body className="font-sans antialiased">
         <BackgroundPaths />
         {children}
         <Analytics />
       </body>
     </html>
-  )
+  );
 }
