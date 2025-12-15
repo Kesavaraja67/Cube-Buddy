@@ -77,21 +77,6 @@ cube-buddy/
 The project follows the Next.js 14 App Router architecture with proper separation of server and client components.
 ~~~
 ---
-## ⚙️ Getting Started (Local Setup)
-
-### 1️⃣ Clone the repository
-```bash
-git clone https://github.com/Kesavaraja67/Cube-Buddy.git
-cd Cube-Buddy
-```
-## Install dependencies
-```
-npm install
-```
-## Run the development server
-```
-npm run dev
-```
 ## 🧠 What I Learned
 Handling client/server components in Next.js App Router
 Fixing useSearchParams with Suspense boundaries
