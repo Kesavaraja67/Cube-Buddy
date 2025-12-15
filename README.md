@@ -86,20 +86,15 @@ Handling static assets correctly without Git LFS
 
 ## 🌐 Deployment
 The application is deployed using Vercel.
-```
+
 🔗 Live URL: https://cube-buddy.vercel.app/
-```
+
 ## Acknowledgements
 
 Inspired by twisty puzzle communities and Rubik’s Cube solvers
 Thanks to Next.js and Vercel documentation
 
 ## Contact
-~~~
 Kesavaraja M
 📧 LinkedIn: (https://www.linkedin.com/in/kesavaraja-m/)
 🌐 GitHub: https://github.com/Kesavaraja67
-~~~
-
-
-
