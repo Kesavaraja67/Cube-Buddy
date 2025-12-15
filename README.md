@@ -96,8 +96,7 @@ Thanks to Next.js and Vercel documentation
 
 ## Contact
 
-Kesavaraja M
+### Kesavaraja M
 
 📧 LinkedIn: (https://www.linkedin.com/in/kesavaraja-m/)
-
 🌐 GitHub: https://github.com/Kesavaraja67
